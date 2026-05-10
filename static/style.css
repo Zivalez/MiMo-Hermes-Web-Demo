@@ -1,4 +1,4 @@
-﻿:root {
+:root {
     --bg-color: #0b0d17;
     --panel-bg: rgba(20, 22, 35, 0.4);
     --panel-border: rgba(255, 255, 255, 0.08);
@@ -479,6 +479,8 @@ input::placeholder {
     font-family: var(--font-mono);
     font-size: 0.85rem;
     border: 1px solid transparent;
+    word-break: break-all;
+    overflow-wrap: break-word;
 }
 
 .file-list li:hover {
@@ -588,3 +590,29 @@ input::placeholder {
 .github-link:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.2); box-shadow: 0 0 10px rgba(255,255,255,0.1); }
 
 
+/* Custom Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-color); }
+::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-cyan); }
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .app-container { padding: 1rem; }
+    .top-nav { flex-direction: column; gap: 1.5rem; margin-bottom: 2rem; }
+    .hero-title { font-size: 2.2rem; }
+    .hero-subtitle { font-size: 0.95rem; }
+    .input-group { flex-direction: column; border-radius: 16px; background: transparent; padding: 0; gap: 1rem; }
+    .input-wrapper { width: 100%; border-radius: 100px; background: rgba(0,0,0,0.4); }
+    .primary-btn { width: 100%; justify-content: center; }
+    .steps { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .step { flex-direction: row; width: 100%; }
+    .step-line { width: 2px; height: 20px; margin: 0 0 0 19px; }
+    .tabs { flex-wrap: wrap; }
+    .tab-btn { padding: 0.8rem 1rem; flex: 1; text-align: center; }
+    .glass-panel { padding: 1.2rem; }
+    .insight-value { font-size: 1.4rem; }
+    .validation-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+    .plan-grid { grid-template-columns: 1fr; }
+    .terminal-body { height: 200px; }
+}
