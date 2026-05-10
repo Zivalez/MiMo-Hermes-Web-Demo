@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.querySelectorAll('.step').forEach(s => {
             if (s.id === stepId) {
                 s.classList.add('active');
+                s.classList.remove('completed');
                 const icon = s.querySelector('.step-icon');
                 if(!icon.querySelector('.spinner')) {
                      icon.innerHTML = '<div class="spinner"></div>';
@@ -49,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (s.classList.contains('active')) {
                     s.classList.remove('active');
                     s.classList.add('completed');
-                    s.querySelector('.step-icon').innerHTML = '✓';
+                    s.querySelector('.step-icon').innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
                 }
             }
         });
@@ -110,8 +111,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get the actual data
                 const data = await response.json();
                 renderResults(data);
-                
                 setTimeout(() => {
+                    setStep('done');
                     resultsSection.classList.remove('hidden');
                     // We DO NOT hide the processing section anymore, so they stack.
                 }, 1000);
