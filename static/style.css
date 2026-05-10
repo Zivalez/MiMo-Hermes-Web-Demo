@@ -583,3 +583,7 @@ input::placeholder {
 .json-children li::before { content: '›'; position: absolute; left: 0; color: var(--accent-purple); font-weight: bold; }
 .json-children li .json-node { margin-bottom: 0; }
 
+
+.github-link { color: var(--text-secondary); transition: color 0.3s ease; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); border-radius: 50%; width: 36px; height: 36px; }
+.github-link:hover { color: var(--text-primary); border-color: rgba(255,255,255,0.2); box-shadow: 0 0 10px rgba(255,255,255,0.1); }
+

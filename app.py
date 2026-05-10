@@ -65,6 +65,11 @@ def analyze_repo(req: AnalyzeRequest):
         if val_path.exists():
             val_data = json.loads(val_path.read_text(encoding="utf-8"))
             
+        # Cleanup the workspace so it doesn't pile up on the VPS disk
+        import shutil
+        if workspace.exists():
+            shutil.rmtree(workspace, ignore_errors=True)
+            
         return {
             "status": "success",
             "run_id": run_id,
@@ -73,6 +78,10 @@ def analyze_repo(req: AnalyzeRequest):
             "validation": val_data
         }
     except Exception as e:
+        # Also ensure cleanup on failure
+        import shutil
+        if workspace.exists():
+            shutil.rmtree(workspace, ignore_errors=True)
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":

@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 renderResults(data);
                 
                 setTimeout(() => {
-                    processingSection.classList.add('hidden');
                     resultsSection.classList.remove('hidden');
+                    // We DO NOT hide the processing section anymore, so they stack.
                 }, 1000);
 
             }, 4500);
