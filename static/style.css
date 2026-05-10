@@ -571,3 +571,15 @@ input::placeholder {
 .validation-terminal .terminal-body {
     height: 400px;
 }
+
+/* Dynamic JSON Viewer */
+.dynamic-json-view { font-size: 0.95rem; }
+.json-node { margin-bottom: 0.8rem; }
+.json-key { color: var(--accent-cyan); font-weight: 600; margin-bottom: 0.3rem; display: inline-block; }
+.json-value { color: var(--text-primary); }
+.json-children { padding-left: 1.5rem; border-left: 1px solid var(--panel-border); margin-top: 0.5rem; }
+.json-children ul { list-style-type: none; padding-left: 0; }
+.json-children li { margin-bottom: 0.5rem; color: var(--text-secondary); position: relative; padding-left: 1rem; }
+.json-children li::before { content: '›'; position: absolute; left: 0; color: var(--accent-purple); font-weight: bold; }
+.json-children li .json-node { margin-bottom: 0; }
+

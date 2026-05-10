@@ -137,43 +137,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         // Plan
+        // Plan (Dynamic Recursive Rendering)
         const plan = data.plan || {};
+        const planContainer = document.getElementById('dynamic-plan-container');
+        planContainer.innerHTML = '';
         
-        const summaryText = plan.project_summary || plan.recommended_architecture || 
-                            (plan.analysis && plan.analysis.summary) || 'No summary available.';
-        elPlanSummary.innerHTML = `<p>${escapeHtml(summaryText)}</p>`;
+        function formatKey(key) {
+            if (!key) return '';
+            return key.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+        }
         
-        elPlanOrder.innerHTML = '';
-        let orderItems = [];
-        if (Array.isArray(plan.execution_order)) {
-            orderItems = plan.execution_order;
-        } else if (plan.modernization_plan && Array.isArray(plan.modernization_plan.phases)) {
-            orderItems = plan.modernization_plan.phases.map(p => `${p.name} - ${p.estimated_effort || ''}`);
-        } else if (typeof plan.execution_order === 'string') {
-            orderItems = plan.execution_order.split('->').map(s => s.trim());
-        } else if (plan.modernization_plan && typeof plan.modernization_plan.execution_order === 'string') {
-            orderItems = plan.modernization_plan.execution_order.split('->').map(s => s.trim());
+        function buildNode(key, value) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'json-node';
+            
+            if (typeof value === 'object' && value !== null) {
+                if (key) {
+                    const title = document.createElement('h4');
+                    title.className = 'json-key';
+                    title.textContent = formatKey(key);
+                    wrapper.appendChild(title);
+                }
+                
+                const children = document.createElement('div');
+                children.className = 'json-children';
+                
+                if (Array.isArray(value)) {
+                    const ul = document.createElement('ul');
+                    value.forEach(item => {
+                        const li = document.createElement('li');
+                        if (typeof item === 'object' && item !== null) {
+                            li.appendChild(buildNode('', item));
+                        } else {
+                            li.innerHTML = escapeHtml(String(item)).replace(/\n/g, '<br>');
+                        }
+                        ul.appendChild(li);
+                    });
+                    children.appendChild(ul);
+                } else {
+                    for (const k in value) {
+                        children.appendChild(buildNode(k, value[k]));
+                    }
+                }
+                wrapper.appendChild(children);
+            } else {
+                if (key) {
+                    wrapper.innerHTML = `<span class="json-key">${formatKey(key)}:</span> <span class="json-value">${escapeHtml(String(value)).replace(/\n/g, '<br>')}</span>`;
+                } else {
+                    wrapper.innerHTML = `<span class="json-value">${escapeHtml(String(value)).replace(/\n/g, '<br>')}</span>`;
+                }
+            }
+            return wrapper;
         }
-
-        orderItems.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            elPlanOrder.appendChild(li);
-        });
-
-        elPlanRisks.innerHTML = '';
-        let riskItems = [];
-        if (Array.isArray(plan.risks)) {
-            riskItems = plan.risks.map(r => typeof r === 'string' ? r : r.issue || JSON.stringify(r));
-        } else if (plan.analysis && Array.isArray(plan.analysis.risks)) {
-            riskItems = plan.analysis.risks.map(r => `[${r.level.toUpperCase()}] ${r.issue}`);
+        
+        if (Object.keys(plan).length === 0) {
+            planContainer.innerHTML = '<p>No plan data available.</p>';
+        } else {
+            for (const key in plan) {
+                planContainer.appendChild(buildNode(key, plan[key]));
+            }
         }
-
-        riskItems.forEach(item => {
-            const li = document.createElement('li');
-            li.textContent = item;
-            elPlanRisks.appendChild(li);
-        });
 
         // Validation
         const val = data.validation || {};
