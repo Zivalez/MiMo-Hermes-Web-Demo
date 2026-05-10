@@ -133,17 +133,12 @@ document.addEventListener('DOMContentLoaded', () => {
             clearInterval(ticker);
 
             if (!response.ok) {
-                let errMsg = `HTTP ${response.status}`;
+                let detail = `Server responded with ${response.status}`;
                 try {
                     const errBody = await response.json();
-                    const d = errBody?.detail;
-                    if (d && typeof d === 'object') {
-                        errMsg = `[${d.code}] ${d.message}`;
-                    } else if (typeof d === 'string') {
-                        errMsg = d;
-                    }
+                    if (errBody?.detail) detail = errBody.detail;
                 } catch (_) {}
-                throw new Error(errMsg);
+                throw new Error(detail);
             }
 
             const data = await response.json();

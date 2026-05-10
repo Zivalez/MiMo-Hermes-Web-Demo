@@ -8,7 +8,6 @@ from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from dotenv import load_dotenv
-from openai import APIStatusError
 
 # Ensure we import from the local modules
 from orchestrator.agent import HermesOrchestrator
@@ -79,24 +78,10 @@ def analyze_repo(req: AnalyzeRequest):
             "plan": plan_data,
             "validation": val_data
         }
-    except APIStatusError as e:
-        if workspace.exists():
-            shutil.rmtree(workspace, ignore_errors=True)
-        body = e.body or {}
-        err = body.get("error", {}) if isinstance(body, dict) else {}
-        raise HTTPException(status_code=e.status_code, detail={
-            "code": err.get("code", str(e.status_code)),
-            "message": err.get("message", str(e)),
-            "type": err.get("type", "api_error"),
-        })
     except Exception as e:
         if workspace.exists():
             shutil.rmtree(workspace, ignore_errors=True)
-        raise HTTPException(status_code=500, detail={
-            "code": "500",
-            "message": str(e),
-            "type": "internal_error",
-        })
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
