@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Virtual Environments
+venv/
+env/
+.venv/
+
+# Environment Variables
+.env
+.env.*
+
+# Project specific
+workspace/
+artifacts/
+
+# System
+.DS_Store
+Thumbs.db

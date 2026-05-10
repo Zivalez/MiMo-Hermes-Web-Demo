@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MiMo Autonomous Code-Base Modernizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-elements">
+        <div class="blob purple-blob"></div>
+        <div class="blob cyan-blob"></div>
+    </div>
+
+    <div class="app-container">
+        <header class="top-nav">
+            <div class="logo">
+                <span class="logo-icon">▲</span>
+                <span class="logo-text">MiMo <span class="highlight">Modernizer</span></span>
+            </div>
+            <div class="nav-badges">
+                <span class="badge version">v1.0 Live Demo</span>
+                <span class="badge domain">mimo.zvlz.me</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="hero-section">
+                <h1 class="hero-title">Autonomous Code-Base <span class="gradient-text">Modernizer</span></h1>
+                <p class="hero-subtitle">Transform legacy architectures into modern, production-ready systems using AI-driven analysis and self-healing validation pipelines.</p>
+                
+                <div class="input-group glass-panel">
+                    <div class="input-wrapper">
+                        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                        <input type="text" id="repo-url" placeholder="Paste GitHub Repository URL (e.g., https://github.com/org/repo)" autocomplete="off">
+                    </div>
+                    <button id="analyze-btn" class="primary-btn">Analyze Repository <span class="arrow">→</span></button>
+                </div>
+            </section>
+
+            <section id="processing-section" class="processing-section hidden">
+                <div class="progress-container glass-panel">
+                    <div class="steps">
+                        <div class="step active" id="step-ingest">
+                            <div class="step-icon"><div class="spinner"></div></div>
+                            <div class="step-text">Ingesting Context</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-plan">
+                            <div class="step-icon">2</div>
+                            <div class="step-text">Planning Modernization</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-validate">
+                            <div class="step-icon">3</div>
+                            <div class="step-text">Validation Sandbox</div>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-report">
+                            <div class="step-icon">4</div>
+                            <div class="step-text">Final Report</div>
+                        </div>
+                    </div>
+                    <div class="log-window terminal-style">
+                        <div class="terminal-header">
+                            <span class="dot red"></span>
+                            <span class="dot yellow"></span>
+                            <span class="dot green"></span>
+                            <span class="terminal-title">mimo-orchestrator ~ /workspace</span>
+                        </div>
+                        <div class="terminal-body" id="live-logs">
+                            <!-- Logs will be appended here -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="results-section" class="results-section hidden">
+                <div class="tabs">
+                    <button class="tab-btn active" data-target="tab-context">Context</button>
+                    <button class="tab-btn" data-target="tab-plan">Modernization Plan</button>
+                    <button class="tab-btn" data-target="tab-validation">Validation Results</button>
+                </div>
+
+                <div class="tab-content active glass-panel" id="tab-context">
+                    <h2 class="section-title">Repository Insight</h2>
+                    <div class="insight-grid">
+                        <div class="insight-card">
+                            <div class="insight-label">Primary Language</div>
+                            <div class="insight-value highlight" id="res-language">-</div>
+                        </div>
+                        <div class="insight-card">
+                            <div class="insight-label">Total Files Ingested</div>
+                            <div class="insight-value" id="res-file-count">-</div>
+                        </div>
+                    </div>
+                    <h3 class="subsection-title">Sample Files Analyzed</h3>
+                    <ul class="file-list" id="res-files">
+                        <!-- File list -->
+                    </ul>
+                </div>
+
+                <div class="tab-content glass-panel" id="tab-plan">
+                    <h2 class="section-title">AI Modernization Plan</h2>
+                    <div class="plan-summary" id="res-plan-summary">
+                        <!-- Summary -->
+                    </div>
+                    <div class="plan-grid">
+                        <div class="plan-card">
+                            <h3 class="card-title">Execution Order</h3>
+                            <ol class="execution-list" id="res-plan-order">
+                                <!-- Order -->
+                            </ol>
+                        </div>
+                        <div class="plan-card">
+                            <h3 class="card-title">Identified Risks</h3>
+                            <ul class="risk-list" id="res-plan-risks">
+                                <!-- Risks -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-content glass-panel" id="tab-validation">
+                    <div class="validation-header">
+                        <h2 class="section-title">Sandbox Validation</h2>
+                        <span class="status-badge" id="res-val-status">Pending</span>
+                    </div>
+                    <div class="command-box">
+                        <span class="cmd-prompt">$</span> <span id="res-val-cmd"></span>
+                    </div>
+                    <div class="terminal-style validation-terminal">
+                        <div class="terminal-header">
+                            <span class="terminal-title">stdout / stderr</span>
+                        </div>
+                        <div class="terminal-body" id="res-val-logs">
+                            <!-- Validation output -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
