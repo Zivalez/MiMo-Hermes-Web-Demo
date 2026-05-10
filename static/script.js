@@ -138,17 +138,38 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Plan
         const plan = data.plan || {};
-        elPlanSummary.innerHTML = `<p>${plan.project_summary || plan.recommended_architecture || 'No summary available.'}</p>`;
+        
+        const summaryText = plan.project_summary || plan.recommended_architecture || 
+                            (plan.analysis && plan.analysis.summary) || 'No summary available.';
+        elPlanSummary.innerHTML = `<p>${escapeHtml(summaryText)}</p>`;
         
         elPlanOrder.innerHTML = '';
-        (plan.execution_order || []).forEach(item => {
+        let orderItems = [];
+        if (Array.isArray(plan.execution_order)) {
+            orderItems = plan.execution_order;
+        } else if (plan.modernization_plan && Array.isArray(plan.modernization_plan.phases)) {
+            orderItems = plan.modernization_plan.phases.map(p => `${p.name} - ${p.estimated_effort || ''}`);
+        } else if (typeof plan.execution_order === 'string') {
+            orderItems = plan.execution_order.split('->').map(s => s.trim());
+        } else if (plan.modernization_plan && typeof plan.modernization_plan.execution_order === 'string') {
+            orderItems = plan.modernization_plan.execution_order.split('->').map(s => s.trim());
+        }
+
+        orderItems.forEach(item => {
             const li = document.createElement('li');
             li.textContent = item;
             elPlanOrder.appendChild(li);
         });
 
         elPlanRisks.innerHTML = '';
-        (plan.risks || []).forEach(item => {
+        let riskItems = [];
+        if (Array.isArray(plan.risks)) {
+            riskItems = plan.risks.map(r => typeof r === 'string' ? r : r.issue || JSON.stringify(r));
+        } else if (plan.analysis && Array.isArray(plan.analysis.risks)) {
+            riskItems = plan.analysis.risks.map(r => `[${r.level.toUpperCase()}] ${r.issue}`);
+        }
+
+        riskItems.forEach(item => {
             const li = document.createElement('li');
             li.textContent = item;
             elPlanRisks.appendChild(li);
