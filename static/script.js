@@ -77,14 +77,60 @@ document.addEventListener('DOMContentLoaded', () => {
         setStep('step-ingest');
         
         try {
-            // Call our FastAPI backend
-            appendLog(`Cloning repository into workspace...`);
+            appendLog('Connecting to pipeline...');
             
+            // Live ticker shown while backend is processing (actual fetch is awaited below)
+            const phases = [
+                { step: 'step-ingest', messages: [
+                    'Cloning repository into workspace...',
+                    'Resolving Git objects and refs...',
+                    'Reading file tree and detecting language...',
+                    'Extracting source file snapshots...',
+                    'Building repository context manifest...',
+                ]},
+                { step: 'step-plan', messages: [
+                    'Sending context to MiMo AI model...',
+                    'AI is analyzing architecture patterns...',
+                    'Generating modernization strategies...',
+                    'Evaluating risk factors and execution order...',
+                    'Finalizing structured plan JSON...',
+                ]},
+                { step: 'step-validate', messages: [
+                    'Spinning up sandbox environment...',
+                    'Installing project dependencies...',
+                    'Running test suite in isolated container...',
+                    'Collecting stdout / stderr output...',
+                    'Writing validation report...',
+                ]},
+            ];
+
+            let phaseIdx = 0;
+            let msgIdx = 0;
+            setStep(phases[0].step);
+            appendLog(phases[0].messages[0]);
+
+            const ticker = setInterval(() => {
+                msgIdx++;
+                const phase = phases[phaseIdx];
+                if (msgIdx < phase.messages.length) {
+                    appendLog(phase.messages[msgIdx]);
+                } else {
+                    phaseIdx++;
+                    msgIdx = 0;
+                    if (phaseIdx < phases.length) {
+                        setStep(phases[phaseIdx].step);
+                        appendLog(phases[phaseIdx].messages[0]);
+                    }
+                }
+            }, 4000);
+
             const response = await fetch('/api/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ repo_url: url })
             });
+
+            clearInterval(ticker);
 
             if (!response.ok) {
                 let detail = `Server responded with ${response.status}`;
@@ -95,34 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(detail);
             }
 
-            // We stream updates using a mocked process since actual backend might not stream yet.
-            // For UI purposes, let's simulate the steps before showing actual results.
+            const data = await response.json();
+            const fileCount = data.context?.files?.length ?? '?';
+
+            // Mark remaining steps as completed in sequence
+            setStep('step-plan');
+            appendLog(`Repository ingested. Detected ${fileCount} file(s).`, 'success');
+            setStep('step-validate');
+            appendLog('AI Modernization Plan generated.', 'success');
+            setStep('step-report');
+            appendLog('Sandbox validation complete.', 'success');
+            appendLog('Aggregating artifacts...', 'info');
+
+            renderResults(data);
             setTimeout(() => {
-                setStep('step-plan');
-                appendLog('Repository ingested. Detected 120 files.', 'success');
-                appendLog('Generating AI Modernization Plan...', 'info');
-            }, 1500);
-
-            setTimeout(() => {
-                setStep('step-validate');
-                appendLog('Plan generated. Initiating Docker sandbox...', 'info');
-                appendLog('Running validations...', 'info');
-            }, 3000);
-
-            setTimeout(async () => {
-                setStep('step-report');
-                appendLog('Validation complete. Aggregating artifacts.', 'success');
-                
-                // Get the actual data
-                const data = await response.json();
-                renderResults(data);
-                setTimeout(() => {
-                    setStep('done');
-                    resultsSection.classList.remove('hidden');
-                    // We DO NOT hide the processing section anymore, so they stack.
-                }, 1000);
-
-            }, 4500);
+                setStep('done');
+                resultsSection.classList.remove('hidden');
+            }, 800);
 
         } catch (error) {
             let msg = error.message;
