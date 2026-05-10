@@ -616,3 +616,32 @@ input::placeholder {
     .plan-grid { grid-template-columns: 1fr; }
     .terminal-body { height: 200px; }
 }
+
+/* Language Support Chips */
+.lang-support-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem;
+    margin-top: 1.2rem;
+}
+.lang-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.78rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 100px;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+}
+.lang-chip.full {
+    background: rgba(0, 255, 136, 0.08);
+    border: 1px solid rgba(0, 255, 136, 0.3);
+    color: var(--accent-green);
+}
+.lang-chip.partial {
+    background: rgba(255, 189, 46, 0.08);
+    border: 1px solid rgba(255, 189, 46, 0.3);
+    color: #ffbd2e;
+}
