@@ -160,8 +160,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 800);
 
         } catch (error) {
-            clearInterval(ticker);
-            appendLog(`Error: ${error.message}`, 'error');
+            let msg = error.message;
+            try {
+                const errData = await error.response?.json();
+                if (errData?.detail) msg = errData.detail;
+            } catch (_) {}
+            appendLog(`Error: ${msg}`, 'error');
             document.querySelectorAll('.step').forEach(s => {
                 if (s.classList.contains('active')) {
                     s.querySelector('.step-icon').innerHTML = '<svg viewBox="0 0 24 24" width="20" height="20" stroke="var(--accent-red)" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';

@@ -1,7 +1,6 @@
 import os
 import uuid
 import json
-import shutil
 from pathlib import Path
 from pydantic import BaseModel
 from fastapi import FastAPI, HTTPException
@@ -79,6 +78,8 @@ def analyze_repo(req: AnalyzeRequest):
             "validation": val_data
         }
     except Exception as e:
+        # Also ensure cleanup on failure
+        import shutil
         if workspace.exists():
             shutil.rmtree(workspace, ignore_errors=True)
         raise HTTPException(status_code=500, detail=str(e))
