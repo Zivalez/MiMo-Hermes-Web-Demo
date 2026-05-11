@@ -949,10 +949,16 @@ input::placeholder {
     outline: none;
     transition: all 0.2s ease;
     text-shadow: 0 0 6px rgba(255, 255, 255, 0.15), 0 0 12px rgba(255, 255, 255, 0.10);
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 0.4rem;
     min-width: 140px;
+    width: 100%;
+}
+
+.select-value {
+    flex: 1;
+    text-align: left;
 }
 
 .custom-select .select-trigger:hover {
@@ -971,6 +977,7 @@ input::placeholder {
     pointer-events: none;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.15));
     transition: transform 0.3s ease;
+    flex-shrink: 0;
 }
 
 .custom-select.open .select-arrow {
