@@ -34,6 +34,8 @@ class RepositoryLanguage(str, Enum):
     TYPESCRIPT = "typescript"
     JAVASCRIPT = "javascript"
     KOTLIN = "kotlin"
+    CPP = "c++"
+    C = "c"
     UNKNOWN = "unknown"
 
 
@@ -191,26 +193,26 @@ class RepositoryLoader:
                 counts[RepositoryLanguage.JAVASCRIPT.value] += 1
             elif suffix == ".kt":
                 counts[RepositoryLanguage.KOTLIN.value] += 1
+            elif suffix in {".cpp", ".hpp", ".cc", ".cxx"}:
+                counts[RepositoryLanguage.CPP.value] += 1
+            elif suffix == ".c":
+                counts[RepositoryLanguage.C.value] += 1
+            elif suffix == ".h":
+                # .h is ambiguous; count it toward both C and C++
+                counts[RepositoryLanguage.CPP.value] += 1
+                counts[RepositoryLanguage.C.value] += 1
 
-        if counts[RepositoryLanguage.PYTHON.value]:
-            return RepositoryLanguage.PYTHON
+        # Config-based hints when no source files were counted
+        total = sum(counts.values())
+        if total == 0:
+            if has_package_json and has_tsconfig:
+                return RepositoryLanguage.TYPESCRIPT
+            if has_package_json:
+                return RepositoryLanguage.JAVASCRIPT
+            if has_gradle_kts:
+                return RepositoryLanguage.KOTLIN
+            return RepositoryLanguage.UNKNOWN
 
-        if has_package_json and (has_tsconfig or counts[RepositoryLanguage.TYPESCRIPT.value]):
-            return RepositoryLanguage.TYPESCRIPT
-
-        if has_package_json and counts[RepositoryLanguage.JAVASCRIPT.value]:
-            return RepositoryLanguage.JAVASCRIPT
-
-        if counts[RepositoryLanguage.KOTLIN.value] or has_gradle_kts:
-            return RepositoryLanguage.KOTLIN
-
-        if has_package_json:
-            return RepositoryLanguage.JAVASCRIPT
-
-        if counts[RepositoryLanguage.TYPESCRIPT.value]:
-            return RepositoryLanguage.TYPESCRIPT
-
-        if counts[RepositoryLanguage.JAVASCRIPT.value]:
-            return RepositoryLanguage.JAVASCRIPT
-
-        return RepositoryLanguage.UNKNOWN
+        # Return the language with the highest file count
+        top_lang = max(counts, key=counts.get, default=RepositoryLanguage.UNKNOWN.value)
+        return RepositoryLanguage(top_lang)

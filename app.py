@@ -32,6 +32,8 @@ def read_js():
 
 class AnalyzeRequest(BaseModel):
     repo_url: str
+    model: str = "mimo-v2.5-pro"
+    max_files: int = 100
 
 @app.post("/api/analyze")
 def analyze_repo(req: AnalyzeRequest):
@@ -43,8 +45,8 @@ def analyze_repo(req: AnalyzeRequest):
         orchestrator = HermesOrchestrator(
             source_repo=req.repo_url,
             workspace_dir=workspace,
-            model="mimo-v2.5-pro",
-            max_files=100,  # Limits for the demo to run faster
+            model=req.model,
+            max_files=req.max_files,
             dry_run=False
         )
         

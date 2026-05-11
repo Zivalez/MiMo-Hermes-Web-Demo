@@ -6,6 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const liveLogs = document.getElementById('live-logs');
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
+    const modelSelect = document.getElementById('model-select');
+    const maxFilesSegments = document.querySelectorAll('#max-files-toggle .segment');
 
     // UI Elements for Data binding
     const elLanguage = document.getElementById('res-language');
@@ -17,6 +19,45 @@ document.addEventListener('DOMContentLoaded', () => {
     const elValStatus = document.getElementById('res-val-status');
     const elValCmd = document.getElementById('res-val-cmd');
     const elValLogs = document.getElementById('res-val-logs');
+
+    // Segmented control toggle
+    maxFilesSegments.forEach(btn => {
+        btn.addEventListener('click', () => {
+            maxFilesSegments.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        });
+    });
+
+    // Custom dropdown
+    if (modelSelect) {
+        const trigger = modelSelect.querySelector('.select-trigger');
+        const menu = modelSelect.querySelector('.select-menu');
+        const options = modelSelect.querySelectorAll('.select-option');
+        const valueLabel = trigger.querySelector('.select-value');
+
+        trigger.addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.querySelectorAll('.custom-select.open').forEach(el => {
+                if (el !== modelSelect) el.classList.remove('open');
+            });
+            modelSelect.classList.toggle('open');
+        });
+
+        options.forEach(opt => {
+            opt.addEventListener('click', (e) => {
+                e.stopPropagation();
+                options.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                trigger.dataset.value = opt.dataset.value;
+                valueLabel.textContent = opt.textContent;
+                modelSelect.classList.remove('open');
+            });
+        });
+
+        document.addEventListener('click', () => {
+            modelSelect.classList.remove('open');
+        });
+    }
 
     // Tab switching
     tabBtns.forEach(btn => {
@@ -124,10 +165,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }, 4000);
 
+            const selectedModel = modelSelect ? modelSelect.querySelector('.select-trigger').dataset.value : 'mimo-v2.5-pro';
+            const selectedMaxFiles = document.querySelector('#max-files-toggle .segment.active')?.dataset.value || '100';
+
             const response = await fetch('/api/analyze', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ repo_url: url })
+                body: JSON.stringify({ repo_url: url, model: selectedModel, max_files: parseInt(selectedMaxFiles, 10) })
             });
 
             clearInterval(ticker);
