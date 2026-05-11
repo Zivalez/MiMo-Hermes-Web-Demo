@@ -25,6 +25,8 @@ body {
     min-height: 100vh;
     overflow-x: hidden;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Main wallpaper background */
@@ -110,6 +112,8 @@ body::after {
     max-width: 1100px;
     margin: 0 auto;
     padding: 2.5rem 2rem;
+    flex: 1;
+    width: 100%;
 }
 
 /* Header */
@@ -800,6 +804,32 @@ input::placeholder {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
 ::-webkit-scrollbar-thumb:hover { background: #555; }
+
+/* Site Footer */
+.site-footer {
+    display: flex;
+    justify-content: center;
+    padding: 1.5rem 1rem;
+    margin-top: auto;
+}
+
+.footer-inner {
+    text-align: center;
+}
+
+.footer-tagline {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    margin: 0;
+}
+
+.footer-copyright {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+    margin: 0.35rem 0 0;
+    opacity: 0.7;
+}
 
 /* Mobile Responsive */
 @media (max-width: 768px) {
