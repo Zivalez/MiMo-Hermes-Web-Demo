@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    analyzeBtn.addEventListener('click', async () => {
+    async function handleAnalyze() {
         const url = repoInput.value.trim();
         if (!url) {
             alert('Please enter a repository URL');
@@ -172,6 +172,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
         }
+    }
+
+    analyzeBtn.addEventListener('click', handleAnalyze);
+    repoInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') handleAnalyze();
     });
 
     function renderResults(data) {

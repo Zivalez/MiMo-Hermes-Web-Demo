@@ -37,14 +37,14 @@ body::before {
     height: 100vh;
     z-index: -3;
     pointer-events: none;
-    opacity: 0.15;
+    opacity: 0.10;
     background-image: url("https://raw.githubusercontent.com/ilyamiro/shell-wallpapers/refs/heads/master/images/catpuccin.jpg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
 }
 
-/* Noise overlay on top of wallpaper */
+/* Noise + blur overlay on top of wallpaper */
 body::after {
     content: "";
     position: fixed;
@@ -54,7 +54,9 @@ body::after {
     height: 100vh;
     z-index: -2;
     pointer-events: none;
-    opacity: 0.04;
+    opacity: 0.08;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIxIi8+PC9zdmc+");
     background-repeat: repeat;
     background-size: 200px 200px;
@@ -187,6 +189,7 @@ body::after {
     line-height: 1.05;
     letter-spacing: -1.5px;
     color: var(--text-primary);
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.20), 0 0 12px rgba(255, 255, 255, 0.15), 0 0 24px rgba(255, 255, 255, 0.10), 0 0 48px rgba(255, 255, 255, 0.05);
 }
 
 .gradient-text {
@@ -284,12 +287,34 @@ input::placeholder {
     align-items: center;
     gap: 0.5rem;
     letter-spacing: 0.01em;
+    position: relative;
+    overflow: hidden;
+}
+
+.primary-btn::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    transition: left 0.6s ease;
+    pointer-events: none;
+}
+
+.primary-btn:hover::before {
+    left: 100%;
 }
 
 .primary-btn:hover {
     transform: translateY(-1px);
     box-shadow: 0 0 24px rgba(255, 255, 255, 0.08);
     background: #ffffff;
+}
+
+.primary-btn:active {
+    transform: translateY(-1px) scale(0.97);
 }
 
 .primary-btn .arrow {
@@ -429,6 +454,13 @@ input::placeholder {
 
 .terminal-body p {
     margin-bottom: 0.3rem;
+    opacity: 0;
+    animation: logSlideIn 0.3s ease-out forwards;
+}
+
+@keyframes logSlideIn {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .log-info { color: var(--text-secondary); }
