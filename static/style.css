@@ -133,6 +133,7 @@ body::after {
     gap: 0.5rem;
     letter-spacing: -0.3px;
     color: var(--text-primary);
+    user-select: none;
 }
 
 .logo-icon {
@@ -160,9 +161,8 @@ body::after {
     line-height: 1;
     padding: 0.3rem 0.75rem;
     border-radius: 20px;
-    background: rgba(255, 255, 255, 0.03);
+    background: transparent;
     border: 1px solid var(--panel-border);
-    backdrop-filter: blur(4px);
     font-weight: 500;
     color: var(--text-secondary);
     letter-spacing: 0.02em;
@@ -171,6 +171,13 @@ body::after {
 .badge.domain {
     border-color: rgba(255, 255, 255, 0.1);
     color: var(--text-secondary);
+}
+
+.badge.version {
+    color: var(--text-primary);
+    border-style: dashed;
+    user-select: none;
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.20), 0 0 12px rgba(255, 255, 255, 0.15), 0 0 24px rgba(255, 255, 255, 0.10), 0 0 48px rgba(255, 255, 255, 0.05);
 }
 
 /* Hero Section */
@@ -781,7 +788,7 @@ input::placeholder {
 }
 
 .github-link {
-    color: var(--text-secondary);
+    color: var(--text-primary);
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -791,11 +798,11 @@ input::placeholder {
     border-radius: 50%;
     width: 36px;
     height: 36px;
+    filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.25)) drop-shadow(0 0 12px rgba(255, 255, 255, 0.15));
 }
 .github-link:hover {
     color: var(--text-primary);
     border-color: rgba(255,255,255,0.12);
-    box-shadow: 0 0 12px rgba(255,255,255,0.05);
     background: rgba(255,255,255,0.05);
 }
 
@@ -815,6 +822,7 @@ input::placeholder {
 
 .footer-inner {
     text-align: center;
+    user-select: none;
 }
 
 .footer-tagline {
