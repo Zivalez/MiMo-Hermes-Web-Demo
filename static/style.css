@@ -27,7 +27,7 @@ body {
     position: relative;
 }
 
-/* Subtle film-grain noise overlay */
+/* Main wallpaper background */
 body::before {
     content: "";
     position: fixed;
@@ -35,9 +35,26 @@ body::before {
     left: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 0;
+    z-index: -3;
     pointer-events: none;
-    opacity: 0.035;
+    opacity: 0.15;
+    background-image: url("https://raw.githubusercontent.com/ilyamiro/shell-wallpapers/refs/heads/master/images/catpuccin.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Noise overlay on top of wallpaper */
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    pointer-events: none;
+    opacity: 0.04;
     background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC44IiBudW1PY3RhdmVzPSIzIiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsdGVyPSJ1cmwoI24pIiBvcGFjaXR5PSIxIi8+PC9zdmc+");
     background-repeat: repeat;
     background-size: 200px 200px;
@@ -245,6 +262,11 @@ input[type="text"] {
 
 input::placeholder {
     color: #52525b;
+}
+
+::selection {
+    background: #e4e4e7;
+    color: #09090b;
 }
 
 .primary-btn {
@@ -637,15 +659,84 @@ input::placeholder {
 }
 
 /* Dynamic JSON Viewer */
-.dynamic-json-view { font-size: 0.92rem; }
-.json-node { margin-bottom: 0.7rem; }
-.json-key { color: var(--accent); font-weight: 600; margin-bottom: 0.25rem; display: inline-block; font-size: 0.9rem; }
-.json-value { color: var(--text-primary); }
-.json-children { padding-left: 1.25rem; border-left: 1px solid rgba(255, 255, 255, 0.06); margin-top: 0.4rem; }
-.json-children ul { list-style-type: disc; padding-left: 0; }
-.json-children li { margin-bottom: 0.4rem; color: var(--text-secondary); position: relative; padding-left: 0.9rem; }
-.json-children li::marker { color: var(--accent-dim); }
-.json-children li .json-node { margin-bottom: 0; }
+.dynamic-json-view {
+    font-size: 0.92rem;
+    line-height: 1.6;
+}
+
+.json-node {
+    margin-bottom: 0.6rem;
+}
+
+.json-key {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 0.15rem;
+    display: block;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    text-transform: capitalize;
+}
+
+.json-value {
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.json-children {
+    margin-top: 0.35rem;
+    padding-left: 1rem;
+}
+
+.json-children > .json-node {
+    background: rgba(0, 0, 0, 0.15);
+    border: 1px solid var(--panel-border);
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    margin-bottom: 0.5rem;
+}
+
+.json-children ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.json-children li {
+    margin-bottom: 0.35rem;
+    color: var(--text-secondary);
+    padding-left: 0;
+    position: relative;
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.json-children li:hover {
+    border-color: rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.json-children li::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-dim);
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+.json-children li .json-node {
+    margin-bottom: 0;
+    background: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
+}
 
 .github-link {
     color: var(--text-secondary);
