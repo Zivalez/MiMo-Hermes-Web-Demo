@@ -11,9 +11,6 @@ from context.loader import RepositoryContext, RepositoryLoader
 from sandbox.executor import ExecutionResult, LocalSandbox
 
 
-DEFAULT_MIMO_BASE_URL = "https://api.xiaomimimo.com/v1"
-
-
 @dataclass
 class HermesRunResult:
     report_path: Path
@@ -172,4 +169,5 @@ class HermesOrchestrator:
         if not api_key:
             return None
 
-        return OpenAI(api_key=api_key, base_url=DEFAULT_MIMO_BASE_URL)
+        base_url = os.environ.get("MIMO_BASE_URL", "https://api.xiaomimimo.com/v1")
+        return OpenAI(api_key=api_key, base_url=base_url)
