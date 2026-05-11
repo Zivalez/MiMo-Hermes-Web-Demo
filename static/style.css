@@ -159,9 +159,13 @@ body::after {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--panel-border);
     backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
     font-weight: 500;
     color: var(--text-secondary);
     letter-spacing: 0.02em;
+    box-shadow:
+        inset 1px 1px 0px rgba(255, 255, 255, 0.2),
+        inset -1px -1px 0px rgba(0, 0, 0, 0.15);
 }
 
 .badge.domain {
@@ -207,15 +211,60 @@ body::after {
     line-height: 1.6;
 }
 
-/* Glass Panel */
+/* Liquid Glass Bevel Panel */
 .glass-panel {
-    background: var(--panel-bg);
-    border: 1px solid var(--panel-border);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 14px;
+    position: relative;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(20px) saturate(160%) brightness(1.04);
+    -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(1.04);
+    border-radius: 16px;
     padding: 2rem;
-    box-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
+    box-shadow:
+        /* Outer depth */
+        0 12px 40px rgba(0, 0, 0, 0.4),
+        0 0 0 1px rgba(255, 255, 255, 0.04),
+        /* Perimeter bevel highlight */
+        inset 1px 1px 0px rgba(255, 255, 255, 0.35),
+        inset 2px 2px 4px rgba(255, 255, 255, 0.08),
+        /* Perimeter bevel shadow */
+        inset -1px -1px 0px rgba(0, 0, 0, 0.3),
+        inset -2px -2px 4px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+}
+
+/* Optical lens edge refraction */
+.glass-panel::before {
+    content: "";
+    position: absolute;
+    inset: -8px;
+    border-radius: 24px;
+    backdrop-filter: blur(16px) saturate(220%);
+    -webkit-backdrop-filter: blur(16px) saturate(220%);
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent 70%, black 100%);
+    mask-image: radial-gradient(ellipse at center, transparent 70%, black 100%);
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+/* Intense specular highlight — upper-left convex bevel */
+.glass-panel::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 55%;
+    bottom: 55%;
+    background: radial-gradient(
+        ellipse 100% 100% at 0% 0%,
+        rgba(255, 255, 255, 0.25) 0%,
+        rgba(255, 255, 255, 0.10) 30%,
+        transparent 70%
+    );
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    border-radius: 16px 0 0 0;
 }
 
 /* Input Group */
@@ -660,8 +709,9 @@ input::placeholder {
 
 .status-badge.passed {
     background: rgba(255, 255, 255, 0.03);
-    color: var(--text-secondary);
+    color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    text-shadow: 0 0 4px rgba(255, 255, 255, 0.25), 0 0 12px rgba(255, 255, 255, 0.15);
 }
 
 .status-badge.failed {
