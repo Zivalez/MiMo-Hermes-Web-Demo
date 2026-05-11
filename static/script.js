@@ -222,7 +222,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     value.forEach(item => {
                         const li = document.createElement('li');
                         if (typeof item === 'object' && item !== null) {
-                            li.appendChild(buildNode('', item));
+                            li.className = 'has-card';
+                            const card = document.createElement('div');
+                            card.className = 'json-node json-card';
+                            for (const k in item) {
+                                const v = item[k];
+                                if (typeof v === 'object' && v !== null) {
+                                    card.appendChild(buildNode(k, v));
+                                } else {
+                                    const line = document.createElement('div');
+                                    line.className = 'json-line';
+                                    line.innerHTML = `<span class="json-key">${formatKey(k)}:</span> <span class="json-value">${escapeHtml(String(v)).replace(/\n/g, '<br>')}</span>`;
+                                    card.appendChild(line);
+                                }
+                            }
+                            li.appendChild(card);
                         } else {
                             li.innerHTML = escapeHtml(String(item)).replace(/\n/g, '<br>');
                         }
